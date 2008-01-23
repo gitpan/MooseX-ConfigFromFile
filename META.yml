@@ -1,25 +1,25 @@
----
+--- 
 abstract: An abstract Moose role for setting attributes from a configfile
-author:
-  - 'Brandon L. Black, <blblack@gmail.com>'
-build_requires:
+author: 
+  - Brandon L. Black, <blblack@gmail.com>
+build_requires: 
   Test::More: 0.42
 distribution_type: module
 generated_by: Module::Install version 0.68
 license: perl
-meta-spec:
+meta-spec: 
   url: http://module-build.sourceforge.net/META-spec-v1.3.html
   version: 1.3
 name: MooseX-ConfigFromFile
-no_index:
-  directory:
+no_index: 
+  directory: 
     - inc
     - t
-provides:
-  MooseX::ConfigFromFile:
+provides: 
+  MooseX::ConfigFromFile: 
     file: lib/MooseX/ConfigFromFile.pm
-    version: 0.01
-requires:
-  Moose: 0
-  MooseX::Types::Path::Class: 0
-version: 0.01
+    version: 0.02
+requires: 
+  Moose: 0.35
+  MooseX::Types::Path::Class: 0.04
+version: 0.02
