@@ -6,7 +6,7 @@ use Try::Tiny qw/ try /;
 use Carp qw(croak);
 use namespace::autoclean;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 requires 'get_config_from_file';
 
@@ -29,6 +29,9 @@ sub new_with_config {
         my $cfmeta = $class->meta->find_attribute_by_name('configfile');
         $configfile = try { to_File($class->configfile) };
         $configfile ||= $cfmeta->default if $cfmeta->has_default;
+        if (ref $configfile eq 'CODE') {
+            $configfile = &$configfile($class);
+        }
     }
 
     if (defined $configfile) {
