@@ -1,15 +1,19 @@
 ---
 abstract: 'An abstract Moose role for setting attributes from a configfile'
 author:
-  - "- 2009 the MooseX::ConfigFromFile \"AUTHOR\" and \"CONTRIBUTORS\" as listed below."
+  - 'Brandon L. Black, <blblack@gmail.com>'
 build_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.36
   Test::Fatal: 0
   Test::More: 0.42
+  Test::NoWarnings: 1.04
+  Test::Requires: 0
+  Test::Without::Module: 0
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.36
 distribution_type: module
-generated_by: 'Module::Install version 1.02'
+dynamic_config: 1
+generated_by: 'Module::Install version 1.06'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -27,4 +31,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://git.moose.perl.org/MooseX-ConfigFromFile.git
-version: 0.04
+version: 0.05

@@ -31,7 +31,7 @@ SYNOPSIS
       with 'MooseX::SomeSpecificConfigRole';
 
       # optionally, default the configfile:
-      sub configfile { '/tmp/foo.yaml' }
+      around configfile => sub { '/tmp/foo.yaml' };
 
       # ... insert your stuff here ...
 
@@ -62,14 +62,20 @@ Attributes
   configfile
     This is a Path::Class::File object which can be coerced from a regular
     pathname string. This is the file your attributes are loaded from. You
-    can add a default configfile in the class using the role and it will be
-    honored at the appropriate time:
+    can add a default configfile in the consuming class and it will be
+    honored at the appropriate time (note that a simple sub declaration is
+    not sufficient, as there is already a sub by that name being added by
+    Moose as the attribute reader)
 
-      has +configfile ( default => '/etc/myapp.yaml' );
+      around configfile => sub { '/etc/myapp.yaml' };
 
     Note that you can alternately just provide a "configfile" method which
     returns the config file when called - this will be used in preference to
     the default of the attribute.
+
+    If you have MooseX::Getopt installed, this attribute will also have the
+    "Getopt" trait supplied, so you can also set the configfile from the
+    command line.
 
 Class Methods
   new_with_config
@@ -88,14 +94,14 @@ Class Methods
     which are sourced from the configfile.
 
 COPYRIGHT
-    Copyright (c) 2007 - 2009 the MooseX::ConfigFromFile "AUTHOR" and
-    "CONTRIBUTORS" as listed below.
+    Copyright (c) - the MooseX::ConfigFromFile "AUTHOR" and "CONTRIBUTORS"
+    as listed below.
 
 AUTHOR
     Brandon L. Black, <blblack@gmail.com>
 
 CONTRIBUTORS
-    Tomas Doran "<bobtfish@bobtfish.net>" (current maintainer).
+    Tomas Doran
     Karen Etheridge
     Chris Prather
     Zbigniew Lukasiak

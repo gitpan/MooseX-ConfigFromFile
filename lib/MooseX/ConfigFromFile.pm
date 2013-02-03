@@ -6,7 +6,7 @@ use Try::Tiny qw/ try /;
 use Carp qw(croak);
 use namespace::autoclean;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 requires 'get_config_from_file';
 
@@ -15,6 +15,7 @@ has configfile => (
     isa => File,
     coerce => 1,
     predicate => 'has_configfile',
+    do { try { require MooseX::Getopt; (traits => ['Getopt']) } },
 );
 
 sub new_with_config {
@@ -26,11 +27,18 @@ sub new_with_config {
         $configfile = $opts{configfile}
     }
     else {
+        # This would only succeed if the consumer had defined a new configfile
+        # sub to override the generated reader
+        $configfile = try { $class->configfile };
+
+        # this is gross, but since a lot of users have swapped in their own
+        # default subs, we have to keep calling it rather than calling a
+        # builder sub directly - and it might not even be a coderef either
         my $cfmeta = $class->meta->find_attribute_by_name('configfile');
-        $configfile = try { to_File($class->configfile) };
         $configfile ||= $cfmeta->default if $cfmeta->has_default;
+
         if (ref $configfile eq 'CODE') {
-            $configfile = &$configfile($class);
+            $configfile = $configfile->($class);
         }
     }
 
@@ -87,7 +95,7 @@ MooseX::ConfigFromFile - An abstract Moose role for setting attributes from a co
   with 'MooseX::SomeSpecificConfigRole';
 
   # optionally, default the configfile:
-  sub configfile { '/tmp/foo.yaml' }
+  around configfile => sub { '/tmp/foo.yaml' };
 
   # ... insert your stuff here ...
 
@@ -121,13 +129,19 @@ during its normal C<new_with_options>.
 
 This is a L<Path::Class::File> object which can be coerced from a regular pathname
 string.  This is the file your attributes are loaded from.  You can add a default
-configfile in the class using the role and it will be honored at the appropriate time:
+configfile in the consuming class and it will be honored at the appropriate time
+(note that a simple sub declaration is not sufficient, as there is already a
+sub by that name being added by Moose as the attribute reader)
 
-  has +configfile ( default => '/etc/myapp.yaml' );
+  around configfile => sub { '/etc/myapp.yaml' };
 
 Note that you can alternately just provide a C<configfile> method which returns
 the config file when called - this will be used in preference to the default of
 the attribute.
+
+If you have L<MooseX::Getopt> installed, this attribute will also have the
+C<Getopt> trait supplied, so you can also set the configfile from the
+command line.
 
 =head1 Class Methods
 
@@ -149,7 +163,7 @@ a hashref of arguments to pass to C<new()> which are sourced from the configfile
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007 - 2009 the MooseX::ConfigFromFile "AUTHOR" and "CONTRIBUTORS" as listed below.
+Copyright (c) - the MooseX::ConfigFromFile "AUTHOR" and "CONTRIBUTORS" as listed below.
 
 =head1 AUTHOR
 
@@ -159,7 +173,7 @@ Brandon L. Black, E<lt>blblack@gmail.comE<gt>
 
 =over
 
-=item Tomas Doran C<< <bobtfish@bobtfish.net> >> (current maintainer).
+=item Tomas Doran
 
 =item Karen Etheridge
 
