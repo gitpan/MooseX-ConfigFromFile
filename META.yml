@@ -25,10 +25,10 @@ no_index:
     - t
 requires:
   Moose: 0.35
-  MooseX::Types::Path::Class: 0.04
+  MooseX::Types::Path::Tiny: 0
   Try::Tiny: 0
   namespace::autoclean: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://git.moose.perl.org/MooseX-ConfigFromFile.git
-version: 0.05
+version: 0.06

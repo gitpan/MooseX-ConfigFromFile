@@ -60,12 +60,12 @@ DESCRIPTION
 
 Attributes
   configfile
-    This is a Path::Class::File object which can be coerced from a regular
-    pathname string. This is the file your attributes are loaded from. You
-    can add a default configfile in the consuming class and it will be
-    honored at the appropriate time (note that a simple sub declaration is
-    not sufficient, as there is already a sub by that name being added by
-    Moose as the attribute reader)
+    This is a Path::Tiny object which can be coerced from a regular pathname
+    string or any object that supports stringification. This is the file
+    your attributes are loaded from. You can add a default configfile in the
+    consuming class and it will be honored at the appropriate time (note
+    that a simple sub declaration is not sufficient, as there is already a
+    sub by that name being added by Moose as the attribute reader)
 
       around configfile => sub { '/etc/myapp.yaml' };
 

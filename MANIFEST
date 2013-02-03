@@ -21,5 +21,6 @@ t/03configfile_method.t
 t/04a_getopt.t
 t/04b_getopt.t
 t/05_default_sub.t
+t/06_path_tiny.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
