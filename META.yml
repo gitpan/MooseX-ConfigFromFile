@@ -31,4 +31,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://git.moose.perl.org/MooseX-ConfigFromFile.git
-version: 0.06
+version: 0.07
