@@ -1,21 +1,34 @@
 package MooseX::ConfigFromFile;
+{
+  $MooseX::ConfigFromFile::VERSION = '0.08';
+}
+# git description: v0.07-13-g8879d0c
+
 
 use Moose::Role;
 use MooseX::Types::Path::Tiny 'Path';
-use Try::Tiny qw/ try /;
+use MooseX::Types::Moose 'Undef';
+use Try::Tiny;
 use Carp qw(croak);
 use namespace::autoclean;
 
-our $VERSION = '0.07';
-
 requires 'get_config_from_file';
+
+# overridable in consuming class or role to provide a default value
+# This is called before instantiation, so it must be a class method,
+# and not depend on any other attributes
+sub _get_default_configfile { }
 
 has configfile => (
     is => 'ro',
-    isa => Path,
+    isa => Path|Undef,
     coerce => 1,
     predicate => 'has_configfile',
     do { try { require MooseX::Getopt; (traits => ['Getopt']) } },
+    lazy => 1,
+    # it sucks that we have to do this rather than using a builder, but some old code
+    # simply swaps in a new default sub into the attr definition
+    default => sub { shift->_get_default_configfile },
 );
 
 sub new_with_config {
@@ -28,18 +41,22 @@ sub new_with_config {
     }
     else {
         # This would only succeed if the consumer had defined a new configfile
-        # sub to override the generated reader
+        # sub to override the generated reader - as suggested in old
+        # documentation
         $configfile = try { $class->configfile };
 
         # this is gross, but since a lot of users have swapped in their own
         # default subs, we have to keep calling it rather than calling a
         # builder sub directly - and it might not even be a coderef either
         my $cfmeta = $class->meta->find_attribute_by_name('configfile');
-        $configfile ||= $cfmeta->default if $cfmeta->has_default;
+        $configfile = $cfmeta->default if not defined $configfile and $cfmeta->has_default;
 
         if (ref $configfile eq 'CODE') {
             $configfile = $configfile->($class);
         }
+
+        my $init_arg = $cfmeta->init_arg;
+        $opts{$init_arg} = $configfile if defined $configfile and defined $init_arg;
     }
 
     if (defined $configfile) {
@@ -73,9 +90,9 @@ MooseX::ConfigFromFile - An abstract Moose role for setting attributes from a co
 
   package MooseX::SomeSpecificConfigRole;
   use Moose::Role;
-  
+
   with 'MooseX::ConfigFromFile';
-  
+
   use Some::ConfigFile::Loader ();
 
   sub get_config_from_file {
@@ -95,7 +112,7 @@ MooseX::ConfigFromFile - An abstract Moose role for setting attributes from a co
   with 'MooseX::SomeSpecificConfigRole';
 
   # optionally, default the configfile:
-  around configfile => sub { '/tmp/foo.yaml' };
+  sub _get_default_configfile { '/tmp/foo.yaml' }
 
   # ... insert your stuff here ...
 
@@ -107,38 +124,31 @@ MooseX::ConfigFromFile - An abstract Moose role for setting attributes from a co
 
 =head1 DESCRIPTION
 
-This is an abstract role which provides an alternate constructor for creating 
+This is an abstract role which provides an alternate constructor for creating
 objects using parameters passed in from a configuration file.  The
 actual implementation of reading the configuration file is left to
-concrete subroles.
+concrete sub-roles.
 
 It declares an attribute C<configfile> and a class method C<new_with_config>,
 and requires that concrete roles derived from it implement the class method
 C<get_config_from_file>.
 
-Attributes specified directly as arguments to C<new_with_config> supercede those
+Attributes specified directly as arguments to C<new_with_config> supersede those
 in the configfile.
 
 L<MooseX::Getopt> knows about this abstract role, and will use it if available
-to load attributes from the file specified by the commandline flag C<--configfile>
+to load attributes from the file specified by the command line flag C<--configfile>
 during its normal C<new_with_options>.
 
 =head1 Attributes
 
 =head2 configfile
 
-This is a L<Path::Tiny> object which can be coerced from a regular pathname
+This is a L<Path::Tiny> object which can be coerced from a regular path
 string or any object that supports stringification.
 This is the file your attributes are loaded from.  You can add a default
-configfile in the consuming class and it will be honored at the appropriate time
-(note that a simple sub declaration is not sufficient, as there is already a
-sub by that name being added by Moose as the attribute reader)
-
-  around configfile => sub { '/etc/myapp.yaml' };
-
-Note that you can alternately just provide a C<configfile> method which returns
-the config file when called - this will be used in preference to the default of
-the attribute.
+configfile in the consuming class and it will be honored at the appropriate
+time; see below at L</_get_default_configfile>.
 
 If you have L<MooseX::Getopt> installed, this attribute will also have the
 C<Getopt> trait supplied, so you can also set the configfile from the
@@ -154,13 +164,20 @@ C<new_with_options>.  Example:
 
   my $foo = SomeClass->new_with_config(configfile => '/etc/foo.yaml');
 
-Explicit arguments will overide anything set by the configfile.
+Explicit arguments will override anything set by the configfile.
 
 =head2 get_config_from_file
 
-This class method is not implemented in this role, but it is required of all subroles.
-Its two arguments are the classname and the configfile, and it is expected to return
+This class method is not implemented in this role, but it is required of all
+classes or roles that consume this role.
+Its two arguments are the class name and the configfile, and it is expected to return
 a hashref of arguments to pass to C<new()> which are sourced from the configfile.
+
+=head2 _get_default_configfile
+
+This class method returns nothing by default, but can and should be redefined
+in a consuming class to return the default value of the configfile (if not
+passed into the constructor explicitly).
 
 =head1 COPYRIGHT
 
