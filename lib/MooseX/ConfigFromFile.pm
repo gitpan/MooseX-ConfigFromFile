@@ -1,8 +1,8 @@
 package MooseX::ConfigFromFile;
 {
-  $MooseX::ConfigFromFile::VERSION = '0.08';
+  $MooseX::ConfigFromFile::VERSION = '0.09';
 }
-# git description: v0.07-13-g8879d0c
+# git description: v0.08-2-g93a1051
 
 
 use Moose::Role;

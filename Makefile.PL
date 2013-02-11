@@ -15,9 +15,6 @@ my %WriteMakefileArgs = (
     "File::Find" => 0,
     "File::Temp" => 0,
     "Moose" => 0,
-    "MooseX::SimpleConfig" => 0,
-    "Path::Class" => 0,
-    "Path::Tiny" => 0,
     "Scalar::Util" => 0,
     "Test::CheckDeps" => "0.002",
     "Test::Deep" => 0,
@@ -38,14 +35,13 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "Carp" => 0,
     "Moose::Role" => 0,
-    "MooseX::Getopt" => 0,
     "MooseX::Types::Moose" => 0,
     "MooseX::Types::Path::Tiny" => 0,
     "Try::Tiny" => 0,
     "namespace::autoclean" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.08",
+  "VERSION" => "0.09",
   "test" => {
     "TESTS" => "t/*.t"
   }
