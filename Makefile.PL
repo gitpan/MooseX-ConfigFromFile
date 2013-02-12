@@ -12,8 +12,11 @@ my %WriteMakefileArgs = (
   "ABSTRACT" => "An abstract Moose role for setting attributes from a configfile",
   "AUTHOR" => "Brandon L. Black, <blblack\@gmail.com>, Yuval Kogman <nothingmuch\@woobling.org>, Chris Prather <chris\@prather.org>, Karen Etheridge, <ether\@cpan.org>, Tomas Doran <bobtfish\@bobtfish.net>",
   "BUILD_REQUIRES" => {
+    "ExtUtils::MakeMaker" => 0,
     "File::Find" => 0,
+    "File::Spec::Functions" => 0,
     "File::Temp" => 0,
+    "List::Util" => 0,
     "Moose" => 0,
     "Scalar::Util" => 0,
     "Test::CheckDeps" => "0.002",
@@ -41,7 +44,7 @@ my %WriteMakefileArgs = (
     "namespace::autoclean" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.09",
+  "VERSION" => "0.10",
   "test" => {
     "TESTS" => "t/*.t"
   }

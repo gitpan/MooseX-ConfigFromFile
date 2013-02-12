@@ -7,8 +7,11 @@ author:
   - 'Karen Etheridge, <ether@cpan.org>'
   - 'Tomas Doran <bobtfish@bobtfish.net>'
 build_requires:
+  ExtUtils::MakeMaker: 0
   File::Find: 0
+  File::Spec::Functions: 0
   File::Temp: 0
+  List::Util: 0
   Moose: 0
   Scalar::Util: 0
   Test::CheckDeps: 0.002
@@ -31,7 +34,7 @@ name: MooseX-ConfigFromFile
 provides:
   MooseX::ConfigFromFile:
     file: lib/MooseX/ConfigFromFile.pm
-    version: 0.09
+    version: 0.10
 requires:
   Carp: 0
   Moose::Role: 0
@@ -44,7 +47,7 @@ requires:
 resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=MooseX-ConfigFromFile
   repository: git://git.moose.perl.org/MooseX-ConfigFromFile.git
-version: 0.09
+version: 0.10
 x_Dist_Zilla:
   perl:
     version: 5.016002
@@ -118,6 +121,14 @@ x_Dist_Zilla:
       name: AutoPrereqs
       version: 4.300030
     -
+      class: Dist::Zilla::Plugin::Prereqs
+      config:
+        Dist::Zilla::Plugin::Prereqs:
+          phase: test
+          type: recommends
+      name: TestRecommends
+      version: 4.300030
+    -
       class: Dist::Zilla::Plugin::InstallGuide
       name: InstallGuide
       version: 1.200000
@@ -177,6 +188,10 @@ x_Dist_Zilla:
       class: Dist::Zilla::Plugin::Test::Compile
       name: Test::Compile
       version: 2.000
+    -
+      class: Dist::Zilla::Plugin::Test::ReportPrereqs
+      name: Test::ReportPrereqs
+      version: 0.005
     -
       class: Dist::Zilla::Plugin::Test::MinimumVersion
       name: Test::MinimumVersion

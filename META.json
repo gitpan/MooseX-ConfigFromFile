@@ -44,9 +44,16 @@
          }
       },
       "test" : {
+         "recommends" : {
+            "MooseX::Getopt" : "0",
+            "MooseX::SimpleConfig" : "0"
+         },
          "requires" : {
+            "ExtUtils::MakeMaker" : "0",
             "File::Find" : "0",
+            "File::Spec::Functions" : "0",
             "File::Temp" : "0",
+            "List::Util" : "0",
             "Moose" : "0",
             "Scalar::Util" : "0",
             "Test::CheckDeps" : "0.002",
@@ -63,7 +70,7 @@
    "provides" : {
       "MooseX::ConfigFromFile" : {
          "file" : "lib/MooseX/ConfigFromFile.pm",
-         "version" : "0.09"
+         "version" : "0.10"
       }
    },
    "release_status" : "stable",
@@ -78,7 +85,7 @@
          "web" : "http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=gitmo/MooseX-ConfigFromFile.git;a=summary"
       }
    },
-   "version" : "0.09",
+   "version" : "0.10",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.016002"
@@ -170,6 +177,17 @@
             "version" : "4.300030"
          },
          {
+            "class" : "Dist::Zilla::Plugin::Prereqs",
+            "config" : {
+               "Dist::Zilla::Plugin::Prereqs" : {
+                  "phase" : "test",
+                  "type" : "recommends"
+               }
+            },
+            "name" : "TestRecommends",
+            "version" : "4.300030"
+         },
+         {
             "class" : "Dist::Zilla::Plugin::InstallGuide",
             "name" : "InstallGuide",
             "version" : "1.200000"
@@ -243,6 +261,11 @@
             "class" : "Dist::Zilla::Plugin::Test::Compile",
             "name" : "Test::Compile",
             "version" : "2.000"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Test::ReportPrereqs",
+            "name" : "Test::ReportPrereqs",
+            "version" : "0.005"
          },
          {
             "class" : "Dist::Zilla::Plugin::Test::MinimumVersion",
