@@ -1,8 +1,8 @@
 package MooseX::ConfigFromFile;
 {
-  $MooseX::ConfigFromFile::VERSION = '0.10';
+  $MooseX::ConfigFromFile::VERSION = '0.11';
 }
-# git description: v0.09-6-geb27f7e
+# git description: v0.10-2-gd648cbd
 
 
 use Moose::Role;
@@ -40,7 +40,7 @@ sub new_with_config {
     else {
         # This would only succeed if the consumer had defined a new configfile
         # sub to override the generated reader - as suggested in old
-        # documentation
+        # documentation -- or if $class is an instance not a class name
         $configfile = try { $class->configfile };
 
         # this is gross, but since a lot of users have swapped in their own

@@ -22,16 +22,12 @@ my @modules = qw(
   MooseX::SimpleConfig
   MooseX::Types::Moose
   MooseX::Types::Path::Tiny
-  Pod::Coverage::TrustPod
   Scalar::Util
-  Test::CPAN::Meta
   Test::CheckDeps
   Test::Deep
   Test::Fatal
   Test::More
   Test::NoWarnings
-  Test::Pod
-  Test::Pod::Coverage
   Test::Requires
   Test::Without::Module
   Try::Tiny
@@ -47,6 +43,7 @@ my $cpan_meta = "CPAN::Meta";
 if ( -f "MYMETA.json" && eval "require $cpan_meta" ) { ## no critic
   if ( my $meta = eval { CPAN::Meta->load_file("MYMETA.json") } ) {
     my $prereqs = $meta->prereqs;
+    delete $prereqs->{develop};
     my %uniq = map {$_ => 1} map { keys %$_ } map { values %$_ } values %$prereqs;
     $uniq{$_} = 1 for @modules; # don't lose any static ones
     @modules = sort keys %uniq;

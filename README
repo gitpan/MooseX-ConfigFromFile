@@ -1,7 +1,7 @@
 
 
 This archive contains the distribution MooseX-ConfigFromFile,
-version 0.10:
+version 0.11:
 
   An abstract Moose role for setting attributes from a configfile
 
