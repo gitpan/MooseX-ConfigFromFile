@@ -10,12 +10,14 @@ use File::Spec::Functions;
 use List::Util qw/max/;
 
 my @modules = qw(
+  CPAN::Meta::Check
   Carp
   ExtUtils::MakeMaker
-  File::Find
   File::Spec::Functions
-  File::Temp
+  IO::Handle
+  IPC::Open3
   List::Util
+  Module::Build::Tiny
   Moose
   Moose::Role
   MooseX::Getopt
@@ -27,10 +29,10 @@ my @modules = qw(
   Test::Deep
   Test::Fatal
   Test::More
-  Test::NoWarnings
   Test::Requires
   Test::Without::Module
   Try::Tiny
+  if
   namespace::autoclean
   perl
   strict

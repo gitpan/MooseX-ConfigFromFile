@@ -1,12 +1,16 @@
 package MooseX::ConfigFromFile;
-{
-  $MooseX::ConfigFromFile::VERSION = '0.11';
+BEGIN {
+  $MooseX::ConfigFromFile::AUTHORITY = 'cpan:STEVAN';
 }
-# git description: v0.10-2-gd648cbd
+{
+  $MooseX::ConfigFromFile::VERSION = '0.12';
+}
+# git description: v0.11-7-gea602a7
 
+# ABSTRACT: An abstract Moose role for setting attributes from a configfile
 
 use Moose::Role;
-use MooseX::Types::Path::Tiny 'Path';
+use MooseX::Types::Path::Tiny 0.005 'Path';
 use MooseX::Types::Moose 'Undef';
 use Try::Tiny;
 use Carp qw(croak);
@@ -76,9 +80,18 @@ __END__
 
 =pod
 
+=encoding utf-8
+
+=for :stopwords Brandon L. Black, Black Kogman L Chris Prather Karen Etheridge Tomas Doran
+Yuval configfile
+
 =head1 NAME
 
 MooseX::ConfigFromFile - An abstract Moose role for setting attributes from a configfile
+
+=head1 VERSION
+
+version 0.12
 
 =head1 SYNOPSIS
 
@@ -177,31 +190,41 @@ This class method is not implemented in this role, but can and should be defined
 in a consuming class or role to return the default value of the configfile (if not
 passed into the constructor explicitly).
 
-=head1 COPYRIGHT
-
-Copyright (c) - the MooseX::ConfigFromFile "AUTHOR" and "CONTRIBUTORS" as listed below.
-
 =head1 AUTHOR
 
-Brandon L. Black, E<lt>blblack@gmail.comE<gt>
+Brandon L. Black, <blblack@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2013 by Brandon L. Black.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =head1 CONTRIBUTORS
 
-=over
+=over 4
 
-=item Tomas Doran
+=item *
 
-=item Karen Etheridge
+Brandon L Black <blblack@gmail.com>
 
-=item Chris Prather
+=item *
 
-=item Zbigniew Lukasiak
+Chris Prather <chris@prather.org>
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
+
+=item *
+
+Tomas Doran <bobtfish@bobtfish.net>
+
+=item *
+
+Yuval Kogman <nothingmuch@woobling.org>
 
 =back
-
-=head1 LICENSE
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
 
 =cut

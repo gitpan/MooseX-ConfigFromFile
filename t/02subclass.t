@@ -1,9 +1,9 @@
 use strict;
 use warnings FATAL => 'all';
 
-use Test::More tests => 3;
+use Test::More;
 use Test::Fatal;
-use Test::NoWarnings 1.04 ':early';
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 
 {
     package A;
@@ -22,3 +22,4 @@ use Test::NoWarnings 1.04 ':early';
 ok(B->does('MooseX::ConfigFromFile'), 'B does ConfigFromFile');
 is(exception { B->new_with_config() }, undef, 'B->new_with_config lives');
 
+done_testing;
