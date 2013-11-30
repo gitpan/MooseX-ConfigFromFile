@@ -241,13 +241,11 @@ is(
     with 'GenericRole';
     use MooseX::Types::Path::Tiny 'Path';
     use MooseX::Types::Moose 'Undef';
-    use Try::Tiny;
     has configfile => (
         is => 'ro',
         isa => Path|Undef,
         coerce => 1,
         predicate => 'has_configfile',
-        do { try { require MooseX::Getopt; (traits => ['Getopt']) } },
         lazy => 1,
         # it sucks that we have to do this rather than using a builder, but some old code
         # simply swaps in a new default sub into the attr definition

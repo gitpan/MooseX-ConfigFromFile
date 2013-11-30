@@ -1,18 +1,17 @@
 package MooseX::ConfigFromFile;
+{
+  $MooseX::ConfigFromFile::VERSION = '0.13';
+}
+# git description: v0.12-8-g0e3a578
+
 BEGIN {
   $MooseX::ConfigFromFile::AUTHORITY = 'cpan:STEVAN';
 }
-{
-  $MooseX::ConfigFromFile::VERSION = '0.12';
-}
-# git description: v0.11-7-gea602a7
-
 # ABSTRACT: An abstract Moose role for setting attributes from a configfile
 
 use Moose::Role;
 use MooseX::Types::Path::Tiny 0.005 'Path';
 use MooseX::Types::Moose 'Undef';
-use Try::Tiny;
 use Carp qw(croak);
 use namespace::autoclean;
 
@@ -23,7 +22,7 @@ has configfile => (
     isa => Path|Undef,
     coerce => 1,
     predicate => 'has_configfile',
-    do { try { require MooseX::Getopt; (traits => ['Getopt']) } },
+    eval "require MooseX::Getopt; 1" ? (traits => ['Getopt']) : (),
     lazy => 1,
     # it sucks that we have to do this rather than using a builder, but some old code
     # simply swaps in a new default sub into the attr definition
@@ -45,7 +44,7 @@ sub new_with_config {
         # This would only succeed if the consumer had defined a new configfile
         # sub to override the generated reader - as suggested in old
         # documentation -- or if $class is an instance not a class name
-        $configfile = try { $class->configfile };
+        $configfile = eval { $class->configfile };
 
         # this is gross, but since a lot of users have swapped in their own
         # default subs, we have to keep calling it rather than calling a
@@ -80,7 +79,7 @@ __END__
 
 =pod
 
-=encoding utf-8
+=encoding UTF-8
 
 =for :stopwords Brandon L. Black, Black Kogman L Chris Prather Karen Etheridge Tomas Doran
 Yuval configfile
@@ -91,7 +90,7 @@ MooseX::ConfigFromFile - An abstract Moose role for setting attributes from a co
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 SYNOPSIS
 
